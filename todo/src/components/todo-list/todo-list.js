@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import styles from './todo-list.module.scss';
 
 class TodoList extends Component {
@@ -7,23 +7,17 @@ class TodoList extends Component {
         this.state = {
             todos: []
         };
-        this.textInput = React.createRef();
+        this.textInput = createRef(null);
     }
 
     handleSubmit() {
         let inputVal = this.textInput.current.value;
         if(inputVal !== ''){
-            this.makeTodo(inputVal);
+            this.setState({todos: [...this.state.todos, inputVal]});
+        } else {
+            alert('no empty todos!')
         }
         this.textInput.current.value = '';
-    }
-
-    makeTodo(val){
-        const items = [...this.state.todos, val];
-        this.setState({
-            todos: items
-        })
-        console.log(items);
     }
 
     render(){
@@ -37,7 +31,7 @@ class TodoList extends Component {
                     <button onClick={() => this.handleSubmit()}>{this.props.buttonText}</button>
                 </div>
                 <ul>
-                    {this.state.todos.length > 0 && this.state.todos.map((item, i)=>{
+                    {this.state.todos.map((item, i)=>{
                         return (
                             <li key={i + item}>
                                 {item}
